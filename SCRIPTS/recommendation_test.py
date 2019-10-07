@@ -34,19 +34,13 @@ __maintainer__="Bikash Limboo"
 def main():
     try:
         #---Reading users file:
-        u_cols = ['user_id', 'age', 'sex', 'occupation', 'zip_code']
-        users = pd.read_csv('ml-100k/u.user', sep='|', names=u_cols,encoding='latin-1')
-        print(users.head())
-        #---Reading ratings file:
-        r_cols = ['user_id', 'movie_id', 'rating', 'unix_timestamp']
-        ratings = pd.read_csv('ml-100k/u.data', sep='\t', names=r_cols,encoding='latin-1')
-        
-        #Reading items file:
-        i_cols = ['movie id', 'movie title' ,'release date','video release date', 'IMDb URL', 'unknown', 'Action', 'Adventure',
-        'Animation', 'Children\'s', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy',
-        'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western']
-        items = pd.read_csv('ml-100k/u.item', sep='|', names=i_cols,encoding='latin-1')
-        print(items.head())
+        ratings_data = pd.read_csv("ml-latest-small/ratings.csv")
+        #print(ratings_data.head())
+        movie_names = pd.read_csv("ml-latest-small/movies.csv")
+        #print(movie_names.head())
+        movie_data = pd.merge(ratings_data, movie_names, on='movieId')
+        #print(movie_data.groupby("rating").groups.keys())
+        print(movie_data.groupby('title')['rating'].mean())
     except Exception as e:
         log.error(colored(str(e),"red"))
 
