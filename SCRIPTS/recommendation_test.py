@@ -40,7 +40,12 @@ def main():
         #print(movie_names.head())
         movie_data = pd.merge(ratings_data, movie_names, on='movieId')
         #print(movie_data.groupby("rating").groups.keys())
-        print(movie_data.groupby('title')['rating'].mean())
+        #print(movie_data.groupby('title')['rating'].mean().head())
+        #print(movie_data.groupby('title')['rating'].mean().sort_values(ascending=False).head())
+        print(movie_data.groupby('title')['rating'].count().sort_values(ascending=False).head())
+        ratings_mean_count = pd.DataFrame(movie_data.groupby('title')['rating'].mean())
+        ratings_mean_count['rating_counts'] = pd.DataFrame(movie_data.groupby('title')['rating'].count())
+        print(ratings_mean_count)
     except Exception as e:
         log.error(colored(str(e),"red"))
 
