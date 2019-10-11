@@ -16,6 +16,7 @@ import pandas as pd
 import numpy as np
 from termcolor import colored
 import json
+from sklearn.feature_extraction.text import CountVectorizer
 
 #---Local library---
 from logger_config import *
@@ -34,18 +35,23 @@ __maintainer__="Bikash Limboo"
 def main():
     try:
         #---Reading users file:
-        ratings_data = pd.read_csv("ml-latest-small/ratings.csv")
-        #print(ratings_data.head())
-        movie_names = pd.read_csv("ml-latest-small/movies.csv")
-        #print(movie_names.head())
-        movie_data = pd.merge(ratings_data, movie_names, on='movieId')
-        #print(movie_data.groupby("rating").groups.keys())
-        #print(movie_data.groupby('title')['rating'].mean().head())
-        #print(movie_data.groupby('title')['rating'].mean().sort_values(ascending=False).head())
-        print(movie_data.groupby('title')['rating'].count().sort_values(ascending=False).head())
-        ratings_mean_count = pd.DataFrame(movie_data.groupby('title')['rating'].mean())
-        ratings_mean_count['rating_counts'] = pd.DataFrame(movie_data.groupby('title')['rating'].count())
-        print(ratings_mean_count)
+        ratings_data = pd.read_csv("sample-data.csv")
+        #print(ratings_data)
+        # list of text documents
+        text = ["The quick brown fox jumped over the lazy bikash dog.",'This is the first document.']
+        # create the transform
+        vectorizer = CountVectorizer()
+        # tokenize and build vocab
+        vectorizer.fit(text)
+        # summarize
+        print(vectorizer.vocabulary_)
+        # encode document
+        vector = vectorizer.transform(text)
+        # summarize encoded vector
+        print(vector.shape)
+        print(type(vector))
+        print(vector.toarray())
+        
     except Exception as e:
         log.error(colored(str(e),"red"))
 
